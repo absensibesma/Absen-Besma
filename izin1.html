@@ -55,15 +55,15 @@
     <div class="app-container">
         <div class="sidebar">
             <h2>ABSENSI BESMA</h2>
-           <ul>
-    <li><a href="index.html">📝 Form Absensi</a></li>
-    <li><a href="list.html">🚪 Daftar Santri</a></li>
-    <li><a href="daftar.html">📋 Rekap Absen</a></li>
-    <li><a href="rekap.html">📊 Rekap Per Kamar</a></li>
-    <li><a href="izin1.html">📝 Daftar Perizinan</a></li>
-    <li><a href="history.html">📜 Riwayat Perizinan</a></li>
-    <li><a href="izin2.html">🏥 Riwayat Sakit</a></li>
-</ul>
+            <ul>
+                <li><a href="index.html">📝 Form Absensi</a></li>
+                <li><a href="list.html">🚪 Daftar Santri</a></li>
+                <li><a href="daftar.html">📋 Rekap Absen</a></li>
+                <li><a href="rekap.html">📊 Rekap Per Kamar</a></li>
+                <li><a href="izin1.html">📝 Daftar Perizinan</a></li>
+                <li><a href="history.html">📜 Riwayat Perizinan</a></li>
+                <li><a href="izin2.html">🏥 Riwayat Sakit</a></li>
+            </ul>
         </div>
 
         <div class="main-content">
@@ -93,7 +93,7 @@
         </div>
     </div>
 
-   <script>
+    <script>
         // 1. KONFIGURASI DATABASE FIREBASE CLOUD
         const firebaseConfig = {
             databaseURL: "https://db-asrama-default-rtdb.firebaseio.com/"
@@ -157,14 +157,16 @@
 
         // 5. RENDER PEMBUATAN BARIS TABEL HTML ASLI KAMUR
         function renderTabelSesuaiStrukturAsli() {
-            const bodyTabel = document.getElementById('bodyTabelIzin');
+            // PERUBAHAN DI SINI: ID disesuaikan menjadi 'tabelIzinBody' agar sinkron dengan HTML
+            const bodyTabel = document.getElementById('tabelIzinBody');
             if (!bodyTabel) return;
             
             bodyTabel.innerHTML = "";
 
             // Jika database kosong
             if (globalDataIzinAsrama.length === 0) {
-                bodyTabel.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#999; padding:20px;">Tidak ada santri yang sedang dalam perizinan aktif.</td></tr>`;
+                // PERUBAHAN DI SINI: colspan disesuaikan ke 6 agar simetris dengan jumlah kolom
+                bodyTabel.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#999; padding:20px;">Tidak ada santri yang sedang dalam perizinan aktif.</td></tr>`;
                 return;
             }
 
@@ -194,6 +196,7 @@
                     <td><strong>${dataIzin.nama ? dataIzin.nama.toUpperCase() : ''}</strong><br><small style="color:#7f8c8d;">${dataIzin.kamar || ''}</small></td>
                     <td style="text-align: center;"><span class="badge-status ${durasiRealtime.aktif ? 'aktif' : 'expired'}">${durasiRealtime.aktif ? 'Izin Aktif' : 'Selesai'}</span></td>
                     <td style="text-align: center; font-weight: 600; color: #2c3e50;">${durasiRealtime.teks}</td>
+                    <td style="text-align: center; font-weight: 600;">-</td>
                     <td style="text-align: center;" onclick="event.stopPropagation();">
                         <div class="action-buttons">
                             <button class="btn-action edit" onclick="bukaHalamanEdit('${dataIzin.waktuMulai}', '${dataIzin.nama}', '${dataIzin.kamar}')">✏️</button>
@@ -209,7 +212,7 @@
                 trDetail.style.display = "none";
 
                 trDetail.innerHTML = `
-                    <td colspan="5">
+                    <td colspan="6">
                         <div class="detail-container">
                             <p><strong>Nama Lengkap:</strong> ${dataIzin.nama ? dataIzin.nama.toUpperCase() : '-'}</p>
                             <p><strong>Kamar Asrama:</strong> ${dataIzin.kamar || '-'}</p>
@@ -267,7 +270,7 @@
         // 8. TOGGLE DROPDOWN DETAIL BAWAAN ASLI KAMUR
         function toggleDropdown(id, element) {
             const detailRow = document.getElementById(id);
-            if (detailRow.style.display === \"table-row\") {
+            if (detailRow.style.display === "table-row") {
                 detailRow.style.display = "none"; 
                 element.classList.remove("active");
             } else {
