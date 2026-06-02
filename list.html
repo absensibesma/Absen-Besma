@@ -6,301 +6,58 @@
     <title>Daftar Presensi Santri</title>
     <style>
         /* ==================== RESET & BASE LAYOUT ==================== */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .app-container { display: flex; min-height: 100vh; background-color: #f0f2f5; }
 
-        .app-container {
-            display: flex;
-            min-height: 100vh;
-            background-color: #f0f2f5;
-        }
-
-        /* ==================== STYLE NAVIGATOR (SIDEBAR) ==================== */
-        .sidebar {
-            width: 250px;
-            background-color: #2c3e50;
-            color: #ecf0f1;
-            padding-top: 20px;
-            position: fixed;
-            height: 100vh;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            z-index: 100;
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            color: #ffffff;
-            margin-bottom: 30px;
-            font-size: 20px;
-            letter-spacing: 1px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-        }
-
-        .sidebar ul li a {
-            display: block;
-            color: #bdc3c7;
-            padding: 15px 25px;
-            text-decoration: none;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar ul li a:hover {
-            color: #ffffff;
-            background-color: #34495e;
-            padding-left: 35px;
-        }
-
-        .sidebar ul li a.active {
-            background-color: #d97706;
-            color: white;
-            font-weight: bold;
-        }
+        /* ==================== STYLE SIDEBAR ==================== */
+        .sidebar { width: 250px; background-color: #2c3e50; color: #ecf0f1; padding-top: 20px; position: fixed; height: 100vh; font-family: 'Segoe UI', Arial, sans-serif; z-index: 100; }
+        .sidebar h2 { text-align: center; color: #ffffff; margin-bottom: 30px; font-size: 20px; letter-spacing: 1px; }
+        .sidebar ul { list-style: none; }
+        .sidebar ul li a { display: block; color: #bdc3c7; padding: 15px 25px; text-decoration: none; font-size: 16px; transition: all 0.3s ease; }
+        .sidebar ul li a:hover { color: #ffffff; background-color: #34495e; padding-left: 35px; }
+        .sidebar ul li a.active { background-color: #d97706; color: white; font-weight: bold; }
 
         /* ==================== MAIN CONTENT AREA ==================== */
-        .main-content {
-            flex: 1;
-            margin-left: 250px;
-            padding: 40px;
-            box-sizing: border-box;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 15px;
-        }
-
-        .header-section h1 {
-            color: #2c3e50;
-            font-size: 26px;
-        }
-
-        .date-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: white;
-            padding: 8px 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .date-control label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #64748b;
-        }
-
-        .date-control input[type="date"] {
-            border: 1px solid #cbd5e1;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-family: inherit;
-            font-size: 14px;
-            color: #334155;
-            outline: none;
-        }
+        .main-content { flex: 1; margin-left: 250px; padding: 40px; box-sizing: border-box; min-height: 100vh; font-family: 'Segoe UI', Arial, sans-serif; }
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; }
+        .header-section h1 { color: #2c3e50; font-size: 26px; }
+        .date-control { display: flex; align-items: center; gap: 10px; background: white; padding: 8px 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .date-control label { font-size: 14px; font-weight: 600; color: #64748b; }
+        .date-control input[type="date"] { border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 6px; font-family: inherit; font-size: 14px; color: #334155; outline: none; }
 
         /* ==================== ROOM CARD GRID ==================== */
-        .grid-kamar {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
+        .grid-kamar { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card-kamar { background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 20px; border-top: 5px solid #d97706; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .card-kamar:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .card-kamar h3 { color: #1e293b; font-size: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .info-stat { font-size: 14px; color: #64748b; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .badge-count { background-color: #f1f5f9; color: #334155; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+        .progress-bar { background-color: #e2e8f0; height: 6px; border-radius: 3px; margin-top: 15px; overflow: hidden; }
+        .progress-fill { background-color: #10b981; height: 100%; width: 0%; transition: width 0.5s ease; }
+        .status-lengkap { border-top-color: #10b981; }
 
-        .card-kamar {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            padding: 20px;
-            border-top: 5px solid #d97706;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
+        /* ==================== MODAL POPUP ==================== */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(15, 23, 42, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-content-box { background: white; width: 100%; max-width: 550px; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); overflow: hidden; transform: translateY(-20px); transition: transform 0.3s ease; }
+        .modal-overlay.show .modal-content-box { transform: translateY(0); }
+        .modal-header { background-color: #2c3e50; color: white; padding: 20px; font-size: 18px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+        .btn-close-modal { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+        .modal-body { padding: 20px; max-height: 400px; overflow-y: auto; }
 
-        .card-kamar:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-        }
+        .santri-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f1f5f9; }
+        .santri-row:last-child { border-bottom: none; }
+        .santri-info { font-weight: 500; color: #334155; }
+        .santri-actions { display: flex; gap: 5px; }
 
-        .card-kamar h3 {
-            color: #1e293b;
-            font-size: 20px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .info-stat {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .badge-count {
-            background-color: #f1f5f9;
-            color: #334155;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .progress-bar {
-            background-color: #e2e8f0;
-            height: 6px;
-            border-radius: 3px;
-            margin-top: 15px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background-color: #10b981;
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .status-lengkap {
-            border-top-color: #10b981;
-        }
-
-        /* ==================== MODAL DIALOG POPUP ==================== */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(15, 23, 42, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content-box {
-            background: white;
-            width: 100%;
-            max-width: 550px;
-            border-radius: 12px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transform: translateY(-20px);
-            transition: transform 0.3s ease;
-        }
-
-        .modal-overlay.show .modal-content-box {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            font-size: 18px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn-close-modal {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        /* Row Santri Inside Modal */
-        .santri-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .santri-row:last-child {
-            border-bottom: none;
-        }
-
-        .santri-info {
-            font-weight: 500;
-            color: #334155;
-        }
-
-        .santri-actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        /* Status Button Controls */
-        .btn-status {
-            border: 1px solid #cbd5e1;
-            padding: 6px 12px;
-            font-size: 12px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            background-color: white;
-            color: #64748b;
-            transition: all 0.2s;
-        }
-
+        .btn-status { border: 1px solid #cbd5e1; padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; cursor: pointer; background-color: white; color: #64748b; transition: all 0.2s; }
         .btn-status.hadir:hover, .btn-status.hadir.active { background-color: #dcfce7; color: #15803d; border-color: #86efac; }
         .btn-status.izin:hover, .btn-status.izin.active { background-color: #fef3c7; color: #92400e; border-color: #fcd34d; }
         .btn-status.sakit:hover, .btn-status.sakit.active { background-color: #e0f2fe; color: #0369a1; border-color: #7dd3fc; }
         .btn-status.alpha:hover, .btn-status.alpha.active { background-color: #fee2e2; color: #991b1b; border-color: #fca5a5; }
 
-        .keterangan-izin-label {
-            font-size: 11px;
-            color: #d97706;
-            font-weight: bold;
-            background: #fffbeb;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid #fef3c7;
-            margin-top: 4px;
-            display: inline-block;
-        }
-
-        .empty-state-grid {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            color: #64748b;
-            background: white;
-            border-radius: 8px;
-            font-style: italic;
-        }
+        .keterangan-izin-label { font-size: 11px; color: #d97706; font-weight: bold; background: #fffbeb; padding: 2px 6px; border-radius: 4px; border: 1px solid #fef3c7; margin-top: 4px; display: inline-block; }
+        .empty-state-grid { grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b; background: white; border-radius: 8px; font-style: italic; }
     </style>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
@@ -331,7 +88,7 @@
             </div>
 
             <div class="grid-kamar" id="wrapperGridKamar">
-                <div class="empty-state-grid">Menghubungkan ke database cloud...</div>
+                <div class="empty-state-grid" id="statusKoneksiDb">Menghubungkan ke database cloud...</div>
             </div>
         </div>
     </div>
@@ -342,8 +99,7 @@
                 <span id="judulModalKamar">Detail Kamar</span>
                 <button class="btn-close-modal" onclick="paksaTutupForm()">&times;</button>
             </div>
-            <div class="modal-body" id="kontenModalSantri">
-                </div>
+            <div class="modal-body" id="kontenModalSantri"></div>
         </div>
     </div>
 
@@ -363,7 +119,7 @@
         let globalDataIzinAsrama = [];
         let kamarAktifSekarang = "";
 
-        // 3. INISIALISASI TANGGAL SINKRON (YYYY-MM-DD)
+        // 3. INISIALISASI TANGGAL SINKRON
         function inisialisasiTanggal() {
             const elemenTanggal = document.getElementById('inputTanggalFilter');
             if (elemenTanggal && !elemenTanggal.value) {
@@ -375,11 +131,14 @@
             }
         }
 
-        // 4. AMBIL DATA DARI CLOUD DATABASE (Sudah Diperbaiki Dari Typo Pemanggilan Fungsi)
+        // 4. AMBIL DATA DARI DATABASE (DENGAN PROTEKSI ERROR CONSOLE)
         function listenFirebaseData() {
             db.ref('masterKamarAsrama').on('value', (snapshot) => {
                 MASTER_KAMAR_ASRAMA = snapshot.val() || {};
                 prosesDanRenderTampilan();
+            }, (error) => {
+                console.error(error);
+                document.getElementById('wrapperGridKamar').innerHTML = `<div class="empty-state-grid" style="color:red;">Gagal terhubung: ${error.message}</div>`;
             });
 
             db.ref('dataAbsensiAsrama').on('value', (snapshot) => {
@@ -393,7 +152,7 @@
                 const data = snapshot.val();
                 globalDataIzinAsrama = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                 prosesDanRenderTampilan();
-                if (kamarAktifSekarang) renderUlangModalSantri(); // <-- PERBAIKAN UTAMA: Typo 'renderUlow' telah diperbaiki menjadi 'renderUlang'
+                if (kamarAktifSekarang) renderUlangModalSantri();
             });
         }
 
@@ -410,15 +169,17 @@
             wrapperGrid.innerHTML = "";
 
             const daftarKunciKamar = Object.keys(MASTER_KAMAR_ASRAMA);
+            
+            // Jika data kamar kosong di Firebase, berikan notice yang jelas
             if (daftarKunciKamar.length === 0) {
-                wrapperGrid.innerHTML = `<div class="empty-state-grid">Belum ada master data kamar di Firebase.</div>`;
+                wrapperGrid.innerHTML = `<div class="empty-state-grid">Belum ada master data kamar ("masterKamarAsrama") di Firebase Anda.</div>`;
                 return;
             }
 
             const absensiHariIni = globalDataAbsensiAsrama.filter(item => item && item.tanggal === tanggalTerpilih);
 
             daftarKunciKamar.forEach(namaKamar => {
-                if (!namaKamar) return; 
+                if (!namaKamar) return;
                 
                 const listSantriKamar = MASTER_KAMAR_ASRAMA[namaKamar] || [];
                 const totalSantri = listSantriKamar.length;
@@ -511,21 +272,19 @@
             });
         }
 
-        // 7. SIMPAN DATA REALTIME KE FIREBASE
+        // 7. SIMPAN DATA KE FIREBASE
         function eksekusiSimpanStatusAbsen(namaInput, statusBaru) {
             const tanggalTerpilih = document.getElementById('inputTanggalFilter').value;
 
-            // Jika memilih Izin atau Sakit, arahkan ke form eksternal izin.html demi keamanan data riwayat
             if (statusBaru === 'Izin' || statusBaru === 'Sakit') {
                 sessionStorage.setItem('tempNama', namaInput);
                 sessionStorage.setItem('tempKamar', kamarAktifSekarang);
                 sessionStorage.setItem('tempTanggal', tanggalTerpilih);
-                sessionStorage.setItem('tempStatus', statusBaru); // Mengirim jenis status ke form izin
+                sessionStorage.setItem('tempStatus', statusBaru);
                 window.location.href = 'izin.html';
                 return;
             }
 
-            // Jalur untuk Hadir dan Alpha (Langsung update array cloud tanpa merusak index)
             let dataCleanTerupdate = globalDataAbsensiAsrama.filter(item => {
                 if (!item || !item.nama) return false;
                 return !(item.tanggal === tanggalTerpilih && item.nama.toUpperCase() === namaInput.toUpperCase());
@@ -560,7 +319,7 @@
         inisialisasiTanggal();
         listenFirebaseData();
 
-        // 9. AUTOMATION HIGHLIGHT MENU ACTIVE SIDEBAR
+        // 9. SIDEBAR HIGHLIGHT
         const namaFileAktif = window.location.pathname.split('/').pop();
         document.querySelectorAll('.sidebar ul li a').forEach(link => {
             link.classList.remove('active');
