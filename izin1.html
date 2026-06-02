@@ -95,8 +95,10 @@
     </div>
 
    <script>
-        // 1. KONFIGURASI DATABASE FIREBASE CLOUD
+        // 1. KONFIGURASI DATABASE FIREBASE CLOUD (OPTIMALISASI GITHUB PAGES)
         const firebaseConfig = {
+            apiKey: "AIzaSyAsramaBesmaFakeKeyJustForHandshake", 
+            projectId: "db-asrama-default",
             databaseURL: "https://db-asrama-default-rtdb.firebaseio.com/"
         };
         
@@ -114,24 +116,25 @@
                 const data = snapshot.val();
                 globalDataIzinAsrama = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                 renderTabelSesuaiStrukturAsli();
+            }, (error) => {
+                console.error("Firebase error di GitHub Pages:", error);
             });
         }
 
-        // 4. LOGIKA HITUNG DURASI YANG DISINKRONKAN DENGAN FORMAT STRUKTUR FORM ASLI (ANTI-NaN)
+        // 4. LOGIKA PARSING DAN TIMER YANG AMAN UNTUK SEMUA JENIS BROWSER
         function hitungSisaDurasiRealtime(waktuMulai, waktuSelesai, durasiTeksAlternatif) {
             const sekarang = new Date().getTime();
             
-            // Mencoba konversi tanggal mulai murni angka atau string biasa
-            let tglMulai = isNaN(waktuMulai) ? new Date(String(waktuMulai).replace(' ', 'T')).getTime() : Number(waktuMulai);
-            let tglSelesai = isNaN(waktuSelesai) ? new Date(String(waktuSelesai).replace(' ', 'T')).getTime() : Number(waktuSelesai);
+            // Konversi paksa string tanggal agar dibaca standard ISO (Aman untuk Chrome, Safari, Firefox mobile)
+            let tglMulai = isNaN(waktuMulai) ? new Date(String(waktuMulai).trim().replace(' ', 'T')).getTime() : Number(waktuMulai);
+            let tglSelesai = isNaN(waktuSelesai) ? new Date(String(waktuSelesai).trim().replace(' ', 'T')).getTime() : Number(waktuSelesai);
 
-            // Jika waktuSelesai kosong/rusak, gunakan data teks durasi cadangan bawaan database agar tidak NaN
             if (isNaN(tglSelesai) || tglSelesai <= 0) {
                 return { teks: durasiTeksAlternatif || "Aktif", aktif: true };
             }
 
             if (isNaN(tglMulai)) {
-                return { teks: durasiTeksAlternatif || "Data Tersimpan", aktif: true };
+                return { teks: durasiTeksAlternatif || "Aktif", aktif: true };
             }
 
             if (sekarang < tglMulai) {
@@ -159,7 +162,7 @@
             return { teks: teksDurasiFinal, aktif: true };
         }
 
-        // 5. RENDER PEMBUATAN BARIS TABEL SEPERTI STRUKTUR ASLI (6 KOLOM PASTI MUNCUL)
+        // 5. RENDER PEMBUATAN BARIS TABEL HTML (6 KOLOM SEJAJAR)
         function renderTabelSesuaiStrukturAsli() {
             const bodyTabel = document.getElementById('tabelIzinBody');
             if (!bodyTabel) return;
@@ -179,14 +182,14 @@
                 indeksBaris++;
                 const idDetailDropdown = `detail_${indeksBaris}`;
 
-                // Mengamankan pemanggilan parameter agar membaca property 'waktuSelesai' ATAU 'waktuKembali' sesuai database Anda
+                // Fleksibilitas pembacaan properti cloud (waktuSelesai atau waktuKembali)
                 const targetSelesai = dataIzin.waktuSelesai || dataIzin.waktuKembali || "";
                 const durasiRealtime = hitungSisaDurasiRealtime(dataIzin.waktuMulai, targetSelesai, dataIzin.durasiTeks);
 
-                // Format tampilan teks tanggal mulai untuk kolom ke-4
+                // Format Lokalisasi Teks Tanggal Mulai (Kolom 4)
                 let tglMulaiTeks = "-";
                 if (dataIzin.waktuMulai) {
-                    const tglMulaiObj = isNaN(dataIzin.waktuMulai) ? new Date(String(dataIzin.waktuMulai).replace(' ', 'T')) : new Date(Number(dataIzin.waktuMulai));
+                    const tglMulaiObj = isNaN(dataIzin.waktuMulai) ? new Date(String(dataIzin.waktuMulai).trim().replace(' ', 'T')) : new Date(Number(dataIzin.waktuMulai));
                     if (!isNaN(tglMulaiObj.getTime())) {
                         tglMulaiTeks = tglMulaiObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     } else {
@@ -194,10 +197,10 @@
                     }
                 }
 
-                // Format tampilan teks rencana kembali untuk detail dropdown
+                // Format Lokalisasi Teks Tanggal Selesai (Detail)
                 let tglSelesaiTeks = "-";
                 if (targetSelesai) {
-                    const tglSelesaiObj = isNaN(targetSelesai) ? new Date(String(targetSelesai).replace(' ', 'T')) : new Date(Number(targetSelesai));
+                    const tglSelesaiObj = isNaN(targetSelesai) ? new Date(String(targetSelesai).trim().replace(' ', 'T')) : new Date(Number(targetSelesai));
                     if (!isNaN(tglSelesaiObj.getTime())) {
                         tglSelesaiTeks = tglSelesaiObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
                     } else {
@@ -205,17 +208,19 @@
                     }
                 }
 
-                // Buat baris utama tr
                 const trUtama = document.createElement('tr');
                 trUtama.className = "main-row";
                 trUtama.style.cursor = "pointer";
                 trUtama.onclick = () => toggleDropdown(idDetailDropdown, trUtama);
 
-                // Mengisi 6 kolom tabel secara mutlak (Nama dipastikan muncul paling atas)
+                // Inject 6 Kolom Utama dengan Proteksi Teks Kosong (Upper Case Otomatis)
+                const namaTampilan = dataIzin.nama ? String(dataIzin.nama).toUpperCase() : 'TANPA NAMA';
+                const kamarTampilan = dataIzin.kamar ? String(dataIzin.kamar).toUpperCase() : '-';
+
                 trUtama.innerHTML = `
                     <td style="text-align: center; font-weight: 600;">${indeksBaris}</td>
-                    <td><strong class="nama-santri">${dataIzin.nama ? dataIzin.nama.toUpperCase() : 'TANPA NAMA'}</strong></td>
-                    <td style="text-align: center;"><span class="badge-kamar">${dataIzin.kamar || '-'}</span></td>
+                    <td><strong class="nama-santri">${namaTampilan}</strong></td>
+                    <td style="text-align: center;"><span class="badge-kamar">${kamarTampilan}</span></td>
                     <td style="text-align: center; font-size: 13px; color: #555;">${tglMulaiTeks}</td>
                     <td style="text-align: center; font-weight: 600; color: #2c3e50;">
                         <span class="${durasiRealtime.aktif ? 'countdown-active' : 'status-expired'}">${durasiRealtime.teks}</span>
@@ -228,7 +233,6 @@
                     </td>
                 `;
 
-                // Baris detail dropdown
                 const trDetail = document.createElement('tr');
                 trDetail.id = idDetailDropdown;
                 trDetail.className = "detail-row";
@@ -237,8 +241,8 @@
                 trDetail.innerHTML = `
                     <td colspan="6">
                         <div class="detail-container">
-                            <p><strong>Nama Lengkap:</strong> ${dataIzin.nama ? dataIzin.nama.toUpperCase() : '-'}</p>
-                            <p><strong>Kamar Asrama:</strong> ${dataIzin.kamar || '-'}</p>
+                            <p><strong>Nama Lengkap:</strong> ${namaTampilan}</p>
+                            <p><strong>Kamar Asrama:</strong> ${kamarTampilan}</p>
                             <p><strong>Mulai Izin:</strong> ${tglMulaiTeks}</p>
                             <p><strong>Rencana Kembali / Durasi:</strong> ${tglSelesaiTeks} (${dataIzin.durasiTeks || '-'})</p>
                             <p><strong>Keterangan / Alasan:</strong> <span style="color:#c0392b; font-weight:600;">"${dataIzin.keterangan || '-'}"</span></p>
@@ -254,7 +258,7 @@
 
         // 6. FUNGSI PROSES HAPUS DATA PERIZINAN 
         function prosesHapusIzin(waktuMulai, nama) {
-            if (confirm(`Apakah Anda yakin ingin menghapus data izin atas nama "${nama.toUpperCase()}"?\n\nSantri akan otomatis dianggap kembali ke asrama dan akses absensi di list.html terbuka.`)) {
+            if (confirm(`Apakah Anda yakin ingin menghapus data izin atas nama "${nama.toUpperCase()}"?\n\nSantri akan otomatis dianggap kembali ke asrama.`)) {
                 db.ref('dataIzinAsrama').once('value').then((snapshot) => {
                     const dataLama = snapshot.val() || [];
                     const dataDitemukan = dataLama.find(item => item && String(item.waktuMulai) === String(waktuMulai) && item.nama === nama);
