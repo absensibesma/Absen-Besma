@@ -348,7 +348,7 @@
     </div>
 
     <script>
-        // 1. KONEKSI FIREBASE
+        // 1. KONEKSI FIREBASE (Handshake Safe untuk GitHub Pages)
         const firebaseConfig = {
             databaseURL: "https://db-asrama-default-rtdb.firebaseio.com/"
         };
@@ -363,29 +363,25 @@
         let globalDataIzinAsrama = [];
         let kamarAktifSekarang = "";
 
-        // 3. INISIALISASI TANGGAL (PERBAIKAN: DISINKRONKAN KE FORMAT HTML YYYY-MM-DD)
+        // 3. INISIALISASI TANGGAL SINKRON (YYYY-MM-DD)
         function inisialisasiTanggal() {
             const elemenTanggal = document.getElementById('inputTanggalFilter');
-            if (!elemenTanggal.value) {
+            if (elemenTanggal && !elemenTanggal.value) {
                 const d = new Date();
                 const tahun = d.getFullYear();
                 const bulan = String(d.getMonth() + 1).padStart(2, '0');
                 const tanggal = String(d.getDate()).padStart(2, '0');
-                
-                // Set value ke format standar HTML input date: "YYYY-MM-DD"
                 elemenTanggal.value = `${tahun}-${bulan}-${tanggal}`;
             }
         }
 
-        // 4. AMBIL DATA REALTIME DARI CLOUD DATABASE
+        // 4. AMBIL DATA DARI CLOUD DATABASE (Ditambahkan Proteksi Error / Null Data)
         function listenFirebaseData() {
-            // Ambil struktur master kamar
             db.ref('masterKamarAsrama').on('value', (snapshot) => {
                 MASTER_KAMAR_ASRAMA = snapshot.val() || {};
                 prosesDanRenderTampilan();
             });
 
-            // Ambil data log absensi harian
             db.ref('dataAbsensiAsrama').on('value', (snapshot) => {
                 const data = snapshot.val();
                 globalDataAbsensiAsrama = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
@@ -393,12 +389,11 @@
                 if (kamarAktifSekarang) renderUlangModalSantri();
             });
 
-            // Ambil data perizinan aktif (untuk deteksi otomatis status "Izin")
             db.ref('dataIzinAsrama').on('value', (snapshot) => {
                 const data = snapshot.val();
                 globalDataIzinAsrama = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                 prosesDanRenderTampilan();
-                if (kamarAktifSekarang) renderUlangModalSantri();
+                if (kamarAktifSekarang) renderUlowModalSantri();
             });
         }
 
@@ -406,7 +401,7 @@
             prosesDanRenderTampilan();
         }
 
-        // 5. LOGIKA PEMROSESAN & RENDER KARTU KAMUR
+        // 5. RENDERING KARTU KAMAR (PROTEKSI FULL ANTI BUG)
         function prosesDanRenderTampilan() {
             const wrapperGrid = document.getElementById('wrapperGridKamar');
             if (!wrapperGrid) return;
@@ -420,19 +415,20 @@
                 return;
             }
 
-            // Filter log absensi yang sesuai tanggal hari ini
+            // Bersihkan data absensi dari objek null / rusak sebelum diproses
             const absensiHariIni = globalDataAbsensiAsrama.filter(item => item && item.tanggal === tanggalTerpilih);
 
             daftarKunciKamar.forEach(namaKamar => {
+                if (!namaKamar) return; // Lewati jika nama kamar kosong
+                
                 const listSantriKamar = MASTER_KAMAR_ASRAMA[namaKamar] || [];
                 const totalSantri = listSantriKamar.length;
 
                 let terabsen = 0;
                 listSantriKamar.forEach(namaSantri => {
-                    // Cek apakah sudah input di tabel absen
-                    const sudahAbsen = absensiHariIni.some(a => a.nama.toUpperCase() === namaSantri.toUpperCase() && a.kamar === namaKamar);
-                    
-                    // Cek apakah santri sedang dalam masa izin aktif
+                    if (!namaSantri) return;
+
+                    const sudahAbsen = absensiHariIni.some(a => a && a.nama && a.nama.toUpperCase() === namaSantri.toUpperCase() && a.kamar === namaKamar);
                     const sedangIzin = globalDataIzinAsrama.some(i => i && i.nama && i.nama.toUpperCase() === namaSantri.toUpperCase() && i.kamar === namaKamar);
 
                     if (sudahAbsen || sedangIzin) {
@@ -465,10 +461,11 @@
             });
         }
 
-        // 6. LOGIKA MODAL POPUP DETAIL & UPDATE ABSENSI
+        // 6. LOGIKA MODAL POPUP
         function bukaFormSantriKamar(namaKamar) {
             kamarAktifSekarang = namaKamar;
-            document.getElementById('judulModalKamar').innerText = `🚪 ABSENSI : KAMAR ${namaKamar.toUpperCase()}`;
+            const judulModal = document.getElementById('judulModalKamar');
+            if (judulModal) judulModal.innerText = `🚪 ABSENSI : KAMAR ${namaKamar.toUpperCase()}`;
             renderUlangModalSantri();
             document.getElementById('modalFormSantri').classList.add('show');
         }
@@ -483,16 +480,14 @@
             const listSantri = MASTER_KAMAR_ASRAMA[kamarAktifSekarang] || [];
 
             listSantri.forEach(namaSantri => {
-                // Cari data absensi eksis di database
-                const dataAbsenEksis = globalDataAbsensiAsrama.find(a => a && a.tanggal === tanggalTerpilih && a.nama.toUpperCase() === namaSantri.toUpperCase() && a.kamar === kamarAktifSekarang);
-                
-                // Cari status perizinan aktif
+                if (!namaSantri) return;
+
+                const dataAbsenEksis = globalDataAbsensiAsrama.find(a => a && a.tanggal === tanggalTerpilih && a.nama && a.nama.toUpperCase() === namaSantri.toUpperCase() && a.kamar === kamarAktifSekarang);
                 const dataIzinEksis = globalDataIzinAsrama.find(i => i && i.nama && i.nama.toUpperCase() === namaSantri.toUpperCase() && i.kamar === kamarAktifSekarang);
 
                 let statusAktif = dataAbsenEksis ? dataAbsenEksis.status : "";
                 let labelTambahanIzin = "";
 
-                // Overwrite otomatis jika santri masuk daftar izin aktif
                 if (dataIzinEksis) {
                     statusAktif = "Izin";
                     labelTambahanIzin = `<br><span class="keterangan-izin-label">Pemberitahuan: Sedang Izin ("${dataIzinEksis.keterangan || '-'}")</span>`;
@@ -517,26 +512,25 @@
             });
         }
 
-        // 7. INTERAKSI SIMPAN/UBAH DATA STATUS SECARA REALTIME KE CLOUD
+        // 7. SIMPAN DATA REALTIME KE FIREBASE
         function eksekusiSimpanStatusAbsen(namaInput, statusBaru) {
             const tanggalTerpilih = document.getElementById('inputTanggalFilter').value;
 
-            // Jika status ditekuk ke Izin, oper langsung ke form detail izin.html bawaan Anda
             if (statusBaru === 'Izin') {
                 sessionStorage.setItem('tempNama', namaInput);
                 sessionStorage.setItem('tempKamar', kamarAktifSekarang);
                 sessionStorage.setItem('tempTanggal', tanggalTerpilih);
+                // Navigasi aman tanpa merusak path root repo GitHub Pages Anda
                 window.location.href = 'izin.html';
                 return;
             }
 
-            // Bersihkan data lama santri tersebut pada tanggal terpilih agar tidak duplikat
+            // Bersihkan data lama santri tersebut agar tidak duplikat di cloud
             let dataCleanTerupdate = globalDataAbsensiAsrama.filter(item => {
-                if (!item) return false;
+                if (!item || !item.nama) return false;
                 return !(item.tanggal === tanggalTerpilih && item.nama.toUpperCase() === namaInput.toUpperCase());
             });
 
-            // Masukkan data baru ke array log absensi
             dataCleanTerupdate.push({
                 tanggal: tanggalTerpilih,
                 kamar: kamarAktifSekarang,
@@ -545,7 +539,6 @@
                 keterangan: ""
             });
 
-            // Kirim kembali array data final terupdate ke Firebase node 'dataAbsensiAsrama'
             const cleanArrayKirim = dataCleanTerupdate.filter(item => item !== null);
             db.ref('dataAbsensiAsrama').set(cleanArrayKirim)
                 .catch((error) => {
@@ -553,7 +546,7 @@
                 });
         }
 
-        // 8. MENUTUP MODAL DIALOG POPUP ABSEN
+        // 8. KONTROL PENUTUPAN MODAL
         function tutupFormSantri(e) { 
             if (e.target.id === 'modalFormSantri') paksaTutupForm(); 
         }
@@ -567,7 +560,7 @@
         inisialisasiTanggal();
         listenFirebaseData();
 
-        // 9. AUTOMATION HIGHLIGHT MENU ACTIVE SIDEBAR
+        // 9. AUTOMATION HIGHLIGHT MENU ACTIVE SIDEBAR DISESUAIKAN PATH GITHUB
         const namaFileAktif = window.location.pathname.split('/').pop();
         document.querySelectorAll('.sidebar ul li a').forEach(link => {
             link.classList.remove('active');
