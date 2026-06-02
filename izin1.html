@@ -33,11 +33,6 @@
         .nama-santri:hover { text-decoration: underline; color: #2563eb; }
         .badge-kamar { background-color: #e2e8f0; color: #334155; padding: 4px 10px; border-radius: 20px; font-size: 13px; font-weight: 600; }
         
-        /* Badge status styling tambahan agar sinkron */
-        .badge-status { padding: 4px 10px; border-radius: 6px; font-size: 13px; font-weight: bold; }
-        .badge-status.aktif { color: #16a34a; background-color: #dcfce7; }
-        .badge-status.expired { color: #dc2626; background-color: #fee2e2; }
-
         .countdown-active { color: #16a34a; font-weight: bold; background-color: #dcfce7; padding: 4px 10px; border-radius: 6px; }
         .status-expired { color: #dc2626; font-weight: bold; background-color: #fee2e2; padding: 4px 10px; border-radius: 6px; }
         .empty-state { text-align: center; color: #64748b; padding: 4px 0; font-style: italic; font-size: 15px; }
@@ -122,54 +117,83 @@
             });
         }
 
-        // 4. LOGIKA UTAMA PERBAIKAN HITUNG DURASI (MENGATASI NAN)
+        // 4. LOGIKA UTAMA PARSING TANGGAL AMAN DAN BEBAS DARI BUG 'NaN'
+        function parseKeTimestampAman(inputWaktu) {
+            if (!inputWaktu) return NaN;
+            
+            // Jika sudah berupa angka murni (timestamp milidetik)
+            if (!isNaN(inputWaktu) && typeof inputWaktu !== 'string') {
+                return Number(inputWaktu);
+            }
+            
+            // Jika berupa string angka murni, konversi langsung
+            if (typeof inputWaktu === 'string' && /^\d+$/.test(inputWaktu.trim())) {
+                return Number(inputWaktu.trim());
+            }
+
+            // Ganti spasi dengan huruf 'T' jika formatnya adalah string tanggal biasa (Y-m-d H:i:s)
+            let stringFormatNormal = String(inputWaktu).trim().replace(' ', 'T');
+            let hasilCek = new Date(stringFormatNormal).getTime();
+
+            // Jika masih gagal karena timezone komputer lokal berbeda, coba bersihkan karakter non-standard
+            if (isNaN(hasilCek)) {
+                hasilCek = Date.parse(stringFormatNormal);
+            }
+
+            return hasilCek;
+        }
+
         function hitungSisaDurasiRealtime(waktuMulai, waktuSelesai) {
             const sekarang = new Date().getTime();
             
-            // Konversi aman untuk format tanggal string ataupun timestamp angka
-            const tglMulai = isNaN(waktuMulai) ? new Date(waktuMulai).getTime() : Number(waktuMulai);
-            const tglSelesai = isNaN(waktuSelesai) ? new Date(waktuSelesai).getTime() : Number(waktuSelesai);
+            // Menggunakan parser aman anti-NaN
+            const tglMulai = parseKeTimestampAman(waktuMulai);
+            const tglSelesai = parseKeTimestampAman(waktuSelesai);
 
-            // Jika format tanggal tidak valid sama sekali
+            // Proteksi berlapis jika data di cloud rusak / kosong
             if (isNaN(tglMulai) || isNaN(tglSelesai)) {
                 return { teks: "Format Salah", aktif: false };
             }
 
-            // Jika waktu sekarang belum memasuki tanggal mulai izin
+            // Jika waktu sekarang belum memasuki waktu mulai izin
             if (sekarang < tglMulai) {
                 return { teks: "Belum Dimulai", aktif: true };
             }
 
             const selisihSisaWaktu = tglSelesai - sekarang;
 
-            // Jika waktu izin sudah habis berlalu
+            // Jika waktu perizinan sudah habis
             if (selisihSisaWaktu <= 0) {
                 return { teks: "Waktu Habis", aktif: false };
             }
 
-            // Kalkulasi matematika durasi Hari dan Jam
-            const totalSisaJam = Math.floor(selisihSisaWaktu / (1000 * 60 * 60));
+            // Kalkulasi Hari, Jam, dan Menit secara presisi
+            const totalSisaMenit = Math.floor(selisihSisaWaktu / (1000 * 60));
+            const totalSisaJam = Math.floor(totalSisaMenit / 60);
+            
             const hitungHari = Math.floor(totalSisaJam / 24);
             const sisaJamMurni = totalSisaJam % 24;
+            const sisaMenitMurni = totalSisaMenit % 60;
 
             let teksDurasiFinal = "";
             if (hitungHari > 0) {
                 teksDurasiFinal += `${hitungHari} Hari `;
             }
-            teksDurasiFinal += `${sisaJamMurni} Jam`;
+            if (sisaJamMurni > 0 || hitungHari > 0) {
+                teksDurasiFinal += `${sisaJamMurni} Jam `;
+            }
+            teksDurasiFinal += `${sisaMenitMurni} Menit`;
 
             return { teks: teksDurasiFinal, aktif: true };
         }
 
-        // 5. RENDER PEMBUATAN BARIS TABEL HTML ASLI KAMUR (PERBAIKAN 6 KOLOM UTUH)
+        // 5. RENDER TABEL UTAMA (6 KOLOM PRESISI)
         function renderTabelSesuaiStrukturAsli() {
-            // Sinkronisasi ID Target
             const bodyTabel = document.getElementById('tabelIzinBody');
             if (!bodyTabel) return;
             
             bodyTabel.innerHTML = "";
 
-            // Jika database kosong
             if (globalDataIzinAsrama.length === 0) {
                 bodyTabel.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#999; padding:20px;">Tidak ada santri yang sedang dalam perizinan aktif.</td></tr>`;
                 return;
@@ -183,13 +207,16 @@
                 indeksBaris++;
                 const idDetailDropdown = `detail_${indeksBaris}`;
 
-                // Panggil fungsi durasi anti-NaN yang sudah diperbaiki
+                // Hitung sisa waktu realtime menggunakan fungsi bebas NaN yang baru
                 const durasiRealtime = hitungSisaDurasiRealtime(dataIzin.waktuMulai, dataIzin.waktuSelesai);
 
-                // Format string tanggal untuk kebutuhan tampilan di Dropdown Detail
+                // Mengamankan format konversi penulisan tanggal string untuk label info detail
+                const timestampMulaiAman = parseKeTimestampAman(dataIzin.waktuMulai);
+                const timestampSelesaiAman = parseKeTimestampAman(dataIzin.waktuSelesai);
+                
                 const opsiFormat = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
-                const tglMulaiTeks = new Date(dataIzin.waktuMulai).toLocaleDateString('id-ID', opsiFormat);
-                const tglSelesaiTeks = new Date(dataIzin.waktuSelesai).toLocaleDateString('id-ID', opsiFormat);
+                const tglMulaiTeks = !isNaN(timestampMulaiAman) ? new Date(timestampMulaiAman).toLocaleDateString('id-ID', opsiFormat) : '-';
+                const tglSelesaiTeks = !isNaN(timestampSelesaiAman) ? new Date(timestampSelesaiAman).toLocaleDateString('id-ID', opsiFormat) : '-';
 
                 // Buat Elemen Baris Utama (Tr)
                 const trUtama = document.createElement('tr');
@@ -197,7 +224,7 @@
                 trUtama.style.cursor = "pointer";
                 trUtama.onclick = () => toggleDropdown(idDetailDropdown, trUtama);
 
-                // Pemetaan merata ke 6 Kolom: No, Nama, Kamar, Mulai, Sisa Waktu (Timer), Aksi
+                // Merender data ke dalam susunan 6 kolom dengan sempurna
                 trUtama.innerHTML = `
                     <td style="text-align: center; font-weight: 600;">${indeksBaris}</td>
                     <td><strong class="nama-santri">${dataIzin.nama ? dataIzin.nama.toUpperCase() : ''}</strong></td>
@@ -214,7 +241,7 @@
                     </td>
                 `;
 
-                // Buat Elemen Baris Dropdown Detail (Tr) - Menyesuaikan Colspan ke 6
+                // Buat Elemen Baris Dropdown Detail (Tr)
                 const trDetail = document.createElement('tr');
                 trDetail.id = idDetailDropdown;
                 trDetail.className = "detail-row";
@@ -242,24 +269,20 @@
         function prosesHapusIzin(waktuMulai, nama) {
             if (confirm(`Apakah Anda yakin ingin menghapus data izin atas nama "${nama.toUpperCase()}"?\n\nSantri akan otomatis dianggap kembali ke asrama dan akses absensi di list.html terbuka.`)) {
                 
-                // Ambil snapshot data terbaru dari cloud sebelum menghapus ke riwayat
                 db.ref('dataIzinAsrama').once('value').then((snapshot) => {
                     const dataLama = snapshot.val() || [];
                     const dataDitemukan = dataLama.find(item => item && String(item.waktuMulai) === String(waktuMulai) && item.nama === nama);
 
                     if (dataDitemukan) {
-                        // Salin data ke node riwayatIzinAsrama (history.html)
                         db.ref('riwayatIzinAsrama').once('value').then((histSnapshot) => {
                             let listHist = histSnapshot.val() || [];
                             if (!Array.isArray(listHist)) listHist = Object.values(listHist);
                             
-                            // Tambahkan stamp penanda waktu kembali asli
                             dataDitemukan.waktuKembaliAsli = new Date().getTime();
                             listHist.push(dataDitemukan);
                             db.ref('riwayatIzinAsrama').set(listHist);
                         });
 
-                        // Filter dan hapus dari node utama aktif dataIzinAsrama
                         const dataTerupdate = dataLama.filter(item => item && !(String(item.waktuMulai) === String(waktuMulai) && item.nama === nama));
                         db.ref('dataIzinAsrama').set(dataTerupdate);
                     }
@@ -276,7 +299,7 @@
             window.location.href = 'izin.html';
         }
 
-        // 8. TOGGLE DROPDOWN DETAIL BAWAAN ASLI KAMUR
+        // 8. TOGGLE DROPDOWN DETAIL
         function toggleDropdown(id, element) {
             const detailRow = document.getElementById(id);
             if (detailRow.style.display === "table-row") {
@@ -290,9 +313,11 @@
 
         // === RUNNING PROGRAM UTAMA ===
         tampilkanData();
-        setInterval(renderTabelSesuaiStrukturAsli, 10000); 
+        
+        // Mempercepat interval pembaruan sisa waktu (setiap 1 detik agar hitungan mundur terlihat lancar dan hidup)
+        setInterval(renderTabelSesuaiStrukturAsli, 1000); 
 
-        // Penanganan Highlight Active Sidebar bawaan asli kamu
+        // Penanganan Highlight Active Sidebar bawaan asli Anda
         document.querySelectorAll('.sidebar ul li a').forEach(link => link.classList.remove('active'));
         const namaFileAktif = window.location.pathname.split('/').pop();
         document.querySelectorAll('.sidebar ul li a').forEach(link => {
