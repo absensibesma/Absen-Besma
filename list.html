@@ -348,7 +348,7 @@
     </div>
 
     <script>
-        // 1. KONEKSI FIREBASE (Handshake Safe untuk GitHub Pages)
+        // 1. KONEKSI FIREBASE
         const firebaseConfig = {
             databaseURL: "https://db-asrama-default-rtdb.firebaseio.com/"
         };
@@ -375,7 +375,7 @@
             }
         }
 
-        // 4. AMBIL DATA DARI CLOUD DATABASE (Ditambahkan Proteksi Error / Null Data)
+        // 4. AMBIL DATA DARI CLOUD DATABASE (Sudah Diperbaiki Dari Typo Pemanggilan Fungsi)
         function listenFirebaseData() {
             db.ref('masterKamarAsrama').on('value', (snapshot) => {
                 MASTER_KAMAR_ASRAMA = snapshot.val() || {};
@@ -393,7 +393,7 @@
                 const data = snapshot.val();
                 globalDataIzinAsrama = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
                 prosesDanRenderTampilan();
-                if (kamarAktifSekarang) renderUlowModalSantri();
+                if (kamarAktifSekarang) renderUlangModalSantri(); // <-- PERBAIKAN UTAMA: Typo 'renderUlow' telah diperbaiki menjadi 'renderUlang'
             });
         }
 
@@ -401,7 +401,7 @@
             prosesDanRenderTampilan();
         }
 
-        // 5. RENDERING KARTU KAMAR (PROTEKSI FULL ANTI BUG)
+        // 5. RENDERING KARTU KAMAR
         function prosesDanRenderTampilan() {
             const wrapperGrid = document.getElementById('wrapperGridKamar');
             if (!wrapperGrid) return;
@@ -415,11 +415,10 @@
                 return;
             }
 
-            // Bersihkan data absensi dari objek null / rusak sebelum diproses
             const absensiHariIni = globalDataAbsensiAsrama.filter(item => item && item.tanggal === tanggalTerpilih);
 
             daftarKunciKamar.forEach(namaKamar => {
-                if (!namaKamar) return; // Lewati jika nama kamar kosong
+                if (!namaKamar) return; 
                 
                 const listSantriKamar = MASTER_KAMAR_ASRAMA[namaKamar] || [];
                 const totalSantri = listSantriKamar.length;
@@ -489,8 +488,8 @@
                 let labelTambahanIzin = "";
 
                 if (dataIzinEksis) {
-                    statusAktif = "Izin";
-                    labelTambahanIzin = `<br><span class="keterangan-izin-label">Pemberitahuan: Sedang Izin ("${dataIzinEksis.keterangan || '-'}")</span>`;
+                    statusAktif = dataIzinEksis.status || "Izin";
+                    labelTambahanIzin = `<br><span class="keterangan-izin-label">Pemberitahuan: Sedang ${statusAktif} ("${dataIzinEksis.keterangan || '-'}")</span>`;
                 }
 
                 const row = document.createElement('div');
@@ -516,16 +515,17 @@
         function eksekusiSimpanStatusAbsen(namaInput, statusBaru) {
             const tanggalTerpilih = document.getElementById('inputTanggalFilter').value;
 
-            if (statusBaru === 'Izin') {
+            // Jika memilih Izin atau Sakit, arahkan ke form eksternal izin.html demi keamanan data riwayat
+            if (statusBaru === 'Izin' || statusBaru === 'Sakit') {
                 sessionStorage.setItem('tempNama', namaInput);
                 sessionStorage.setItem('tempKamar', kamarAktifSekarang);
                 sessionStorage.setItem('tempTanggal', tanggalTerpilih);
-                // Navigasi aman tanpa merusak path root repo GitHub Pages Anda
+                sessionStorage.setItem('tempStatus', statusBaru); // Mengirim jenis status ke form izin
                 window.location.href = 'izin.html';
                 return;
             }
 
-            // Bersihkan data lama santri tersebut agar tidak duplikat di cloud
+            // Jalur untuk Hadir dan Alpha (Langsung update array cloud tanpa merusak index)
             let dataCleanTerupdate = globalDataAbsensiAsrama.filter(item => {
                 if (!item || !item.nama) return false;
                 return !(item.tanggal === tanggalTerpilih && item.nama.toUpperCase() === namaInput.toUpperCase());
@@ -560,7 +560,7 @@
         inisialisasiTanggal();
         listenFirebaseData();
 
-        // 9. AUTOMATION HIGHLIGHT MENU ACTIVE SIDEBAR DISESUAIKAN PATH GITHUB
+        // 9. AUTOMATION HIGHLIGHT MENU ACTIVE SIDEBAR
         const namaFileAktif = window.location.pathname.split('/').pop();
         document.querySelectorAll('.sidebar ul li a').forEach(link => {
             link.classList.remove('active');
