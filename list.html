@@ -58,736 +58,489 @@
         }
 
         .sidebar ul li a.active {
-            background-color: #3b82f6;
-            color: white;
-            font-weight: bold;
-        }
-
-        /* ==================== AREA KONTEN UTAMA (KANAN) ==================== */
-        .main-content {
-            margin-left: 250px; 
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-            min-height: 100vh;
-        }
-
-        /* ==================== STYLE BOX DATA KAMAR ==================== */
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-        }
-        
-        .absensi-box { 
-            background-color: #ffffff; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
-            width: 100%; 
-            max-width: 800px;
-        }
-        
-        .absensi-box h1 { 
-            text-align: center; 
-            color: #2c3e50; 
-            margin-bottom: 25px; 
-            font-size: 24px;
-        }
-
-        /* === PANEL AKSI UTAMA & SEARCH === */
-        .panel-aksi-utama {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 15px;
-        }
-
-        .wrapper-search {
-            flex: 1;
-            max-width: 300px;
-            position: relative;
-        }
-
-        .input-search-santri {
-            width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            transition: all 0.2s;
-        }
-
-        .input-search-santri:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-        }
-
-        /* === TOMBOL TAMBAH SANTRI BARU === */
-        .btn-tambah-santri {
-            background-color: #10b981;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-tambah-santri:hover {
-            background-color: #059669;
-            transform: translateY(-1px);
-        }
-
-        /* === STYLING TOMBOL BARU UNTUK INPUT MASSAL === */
-        .btn-tambah-massal {
             background-color: #d97706;
             color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
             font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
+        }
+
+        /* ==================== MAIN CONTENT AREA ==================== */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 40px;
+            box-sizing: border-box;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .header-section {
             display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-tambah-massal:hover {
-            background-color: #b45309;
-            transform: translateY(-1px);
-        }
-
-        /* === GRID TOMBOL KAMAR === */
-        .grid-kamar { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
-            gap: 12px; 
-            margin-bottom: 10px; 
-        }
-        .btn-kamar-biasa { 
-            background-color: #3b82f6; 
-            color: white; 
-            border: none; 
-            padding: 18px 10px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 8px; 
-            transition: all 0.2s;
-        }
-        .btn-kamar-biasa:hover { 
-            background-color: #2563eb; 
-            transform: translateY(-2px);
-        }
-        .badge-count { 
-            background: rgba(255, 255, 255, 0.25); 
-            padding: 2px 8px; 
-            border-radius: 12px; 
-            font-size: 11px; 
-        }
-
-        /* === AREA HASIL PENCARIAN GLOBAL === */
-        .container-hasil-pencarian {
-            margin-top: 10px;
-            display: none;
-        }
-        .judul-pencarian {
-            font-size: 16px;
-            color: #475569;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        /* === MODAL POPUP === */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.5); 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 1000; 
-        }
-        .modal.show { 
-            display: flex; 
-        }
-        .modal-content { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 12px; 
-            width: 90%; 
-            max-width: 650px; 
-            max-height: 85vh; 
-            overflow-y: auto; 
-            position: relative; 
-        }
-        .close-btn { 
-            position: absolute; 
-            top: 15px; 
-            right: 20px; 
-            font-size: 24px; 
-            cursor: pointer; 
-            color: #64748b; 
-        }
-
-        /* === PANEL PILIHAN TANGGAL DI MODAL === */
-        .panel-tanggal-modal {
-            margin: 15px 0 5px 0;
-            padding: 12px;
-            background-color: #f8fafc;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
         }
-        .wrapper-tanggal {
+
+        .header-section h1 {
+            color: #2c3e50;
+            font-size: 26px;
+        }
+
+        .date-control {
             display: flex;
             align-items: center;
-            gap: 12px;
-        }
-        .panel-tanggal-modal label {
-            font-weight: 700;
-            color: #334155;
-            font-size: 14px;
-        }
-        .input-tanggal-modal {
-            padding: 6px 12px;
-            border: 2px solid #cbd5e1;
-            border-radius: 6px;
-            font-weight: bold;
-            color: #1e293b;
-            font-family: inherit;
-            cursor: pointer;
-            outline: none;
-        }
-        .input-tanggal-modal:focus {
-            border-color: #3b82f6;
-        }
-
-        /* === TOMBOL GLOBAL RESET === */
-        .btn-reset-global {
-            background-color: #dc2626;
-            color: white;
-            border: none;
-            padding: 10px 16px;
+            gap: 10px;
+            background: white;
+            padding: 8px 15px;
             border-radius: 8px;
-            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .date-control label {
             font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .btn-reset-global:hover {
-            background-color: #b91c1c;
-            transform: translateY(-1px);
-        }
-
-        .btn-reset-kamar {
-            background-color: #f97316;
-            color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-reset-kamar:hover {
-            background-color: #ea580c;
-        }
-
-        /* === STYLE FORM INPUT DI MODAL TAMBAH === */
-        .form-group {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .form-group label {
-            font-weight: bold;
-            color: #475569;
-            font-size: 14px;
-        }
-        .form-control {
-            padding: 10px 12px;
-            border: 2px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            font-family: inherit;
-        }
-        .form-control:focus {
-            border-color: #3b82f6;
-        }
-        .btn-submit-santri {
-            background-color: #3b82f6;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 15px;
-            width: 100%;
-            margin-top: 10px;
-            transition: background 0.2s;
-        }
-        .btn-submit-santri:hover {
-            background-color: #2563eb;
-        }
-
-        /* === TABEL SISTEM DALAM MODAL & PENCARIAN === */
-        .list-table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 5px; 
-        }
-        .list-table th, .list-table td { 
-            padding: 12px 10px; 
-            border-bottom: 1px solid #e2e8f0; 
-            text-align: left; 
-        }
-        .list-table th { 
-            background-color: #f8fafc; 
-            color: #475569; 
-            font-weight: 600; 
-        }
-
-        /* === TOMBOL TOGGLE STATUS LANGSUNG === */
-        .btn-toggle-status {
-            padding: 7px 14px;
-            border: none;
-            border-radius: 6px;
             font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 115px;
-            text-align: center;
-            display: inline-block;
-        }
-        .btn-status-hadir {
-            background-color: #e2e8f0;
-            color: #475569;
-        }
-        .btn-status-hadir:hover {
-            background-color: #cbd5e1;
-        }
-        .btn-status-absen {
-            background-color: #fee2e2;
-            color: #dc2626;
-            border: 1px solid #fca5a5;
-        }
-        .btn-status-absen:hover {
-            background-color: #fca5a5;
-        }
-        .btn-status-izin-aktif {
-            background-color: #fef3c7;
-            color: #d97706;
-            border: 1px solid #fde68a;
-            cursor: not-allowed;
+            color: #64748b;
         }
 
-        /* === TOMBOL HAPUS NAMA === */
-        .btn-hapus-santri {
-            background-color: #fff1f2;
-            color: #e11d48;
-            border: 1px solid #fecdd3;
+        .date-control input[type="date"] {
+            border: 1px solid #cbd5e1;
             padding: 6px 10px;
             border-radius: 6px;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-hapus-santri:hover {
-            background-color: #ffe4e6;
-            color: #be123c;
-            border-color: #fda4af;
+            font-family: inherit;
+            font-size: 14px;
+            color: #334155;
+            outline: none;
         }
 
-        /* === STYLE ROW KHUSUS SINKRONISASI IZIN === */
-        .row-terblokir-izin {
-            background-color: #f8fafc !important; 
+        /* ==================== ROOM CARD GRID ==================== */
+        .grid-kamar {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
-        .row-terblokir-izin td {
-            color: #94a3b8 !important; 
+
+        .card-kamar {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 20px;
+            border-top: 5px solid #d97706;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
         }
-        .row-terblokir-izin span {
-            color: #94a3b8 !important;
+
+        .card-kamar:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
-        
-        /* BADGE KAMAR DI SEBELAH NAMA */
-        .badge-kamar-info {
-            background-color: #e0f2fe;
-            color: #0369a1;
+
+        .card-kamar h3 {
+            color: #1e293b;
+            font-size: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-stat {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .badge-count {
+            background-color: #f1f5f9;
+            color: #334155;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            background-color: #e2e8f0;
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: #10b981;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .status-lengkap {
+            border-top-color: #10b981;
+        }
+
+        /* ==================== MODAL DIALOG POPUP ==================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(15, 23, 42, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content-box {
+            background: white;
+            width: 100%;
+            max-width: 550px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal-content-box {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        /* Row Santri Inside Modal */
+        .santri-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .santri-row:last-child {
+            border-bottom: none;
+        }
+
+        .santri-info {
+            font-weight: 500;
+            color: #334155;
+        }
+
+        .santri-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Status Button Controls */
+        .btn-status {
+            border: 1px solid #cbd5e1;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            background-color: white;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .btn-status.hadir:hover, .btn-status.hadir.active { background-color: #dcfce7; color: #15803d; border-color: #86efac; }
+        .btn-status.izin:hover, .btn-status.izin.active { background-color: #fef3c7; color: #92400e; border-color: #fcd34d; }
+        .btn-status.sakit:hover, .btn-status.sakit.active { background-color: #e0f2fe; color: #0369a1; border-color: #7dd3fc; }
+        .btn-status.alpha:hover, .btn-status.alpha.active { background-color: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+
+        .keterangan-izin-label {
+            font-size: 11px;
+            color: #d97706;
+            font-weight: bold;
+            background: #fffbeb;
             padding: 2px 6px;
             border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-left: 6px;
+            border: 1px solid #fef3c7;
+            margin-top: 4px;
             display: inline-block;
-            border: 1px solid #bae6fd;
+        }
+
+        .empty-state-grid {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+            background: white;
+            border-radius: 8px;
+            font-style: italic;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
 
     <div class="app-container">
-        
-        <nav class="sidebar">
-            <h2>Menu Utama</h2>
+        <div class="sidebar">
+            <h2>ABSENSI BESMA</h2>
             <ul>
-    <li><a href="index.html">📝 Form Absensi</a></li>
-    <li><a href="list.html">🚪 Daftar Santri</a></li>
-    <li><a href="daftar.html">📋 Rekap Absen</a></li>
-    <li><a href="rekap.html">📊 Rekap Per Kamar</a></li>
-    <li><a href="izin1.html">📝 Daftar Perizinan</a></li>
-    <li><a href="history.html">📜 Riwayat Perizinan</a></li>
-    <li><a href="izin2.html">🏥 Riwayat Sakit</a></li>
-</ul>
-        </nav>
+                <li><a href="index.html">📝 Form Absensi</a></li>
+                <li><a href="list.html">🚪 Daftar Santri</a></li>
+                <li><a href="daftar.html">📋 Rekap Absen</a></li>
+                <li><a href="rekap.html">📊 Rekap Per Kamar</a></li>
+                <li><a href="izin1.html">📝 Daftar Perizinan</a></li>
+                <li><a href="history.html">📜 Riwayat Perizinan</a></li>
+                <li><a href="izin2.html">🏥 Riwayat Sakit</a></li>
+            </ul>
+        </div>
 
-        <main class="main-content">
-            <div class="absensi-box">
-                <h1>📋 Daftar & Presensi Santri</h1>
-                
-                <div class="panel-aksi-utama">
-                    <div class="wrapper-search">
-                        <input type="text" id="searchGlobalInput" class="input-search-santri" placeholder="🔍 Masukkan nama santri (Semua Kamar)..." oninput="handlePencarianGlobal()">
-                    </div>
-                    <button class="btn-tambah-santri" onclick="bukaModalTambahSantri()">➕ Tambah Santri</button>
-                    <button class="btn-tambah-massal" onclick="bukaModalTambahMassal()">📥 Tambah Banyak Santri</button>
-                    <button class="btn-reset-global" onclick="resetSemuaKamarSekaligus()">🔄 Reset Semua Kamar</button>
-                </div>
-
-                <div class="grid-kamar" id="gridKamarContainer"></div>
-
-                <div class="container-hasil-pencarian" id="pencarianGlobalContainer">
-                    <div class="judul-pencarian" id="infoJumlahHasil">🔍 Hasil Pencarian:</div>
-                    <div id="tabelHasilPencarianGlobal"></div>
+        <div class="main-content">
+            <div class="header-section">
+                <h1>🚪 Monitor Kehadiran Per Kamar</h1>
+                <div class="date-control">
+                    <label for="inputTanggalFilter">Tanggal Absen:</label>
+                    <input type="date" id="inputTanggalFilter" onchange="gantiTanggalFilter()">
                 </div>
             </div>
-        </main>
 
-    </div>
-
-    <div class="modal" id="modalFormSantri" onclick="tutupFormSantri(event)">
-        <div class="modal-content">
-            <span class="close-btn" onclick="paksaTutupForm()">&times;</span>
-            <h3 id="modalJudulKamar" style="margin-top: 0; color: #2c3e50;">🚪 DAFTAR SANTRI</h3>
-            
-            <div class="panel-tanggal-modal">
-                <div class="wrapper-tanggal">
-                    <label for="pilihTanggalAbsen">📅 Tanggal Absensi:</label>
-                    <input type="date" id="pilihTanggalAbsen" class="input-tanggal-modal" onchange="handlePerubahanTanggal()">
-                </div>
-                <button class="btn-reset-kamar" onclick="resetKamarAktif()">🔄 Reset Kamar Ini</button>
+            <div class="grid-kamar" id="wrapperGridKamar">
+                <div class="empty-state-grid">Menghubungkan ke database cloud...</div>
             </div>
-
-            <div id="modalIsiSantri"></div>
         </div>
     </div>
 
-    <div class="modal" id="modalTambahSantri" onclick="tutupModalTambahSantri(event)">
-        <div class="modal-content" style="max-width: 450px;">
-            <span class="close-btn" onclick="paksaTutupModalTambah()">&times;</span>
-            <h3 style="margin-top: 0; color: #2c3e50; margin-bottom: 20px;">👤 Tambah Santri Baru</h3>
-            
-            <form id="formInputSantriBaru" onsubmit="simpanSantriBaru(event)">
-                <div class="form-group">
-                    <label for="inputNamaSantri">Nama Lengkap Santri:</label>
-                    <input type="text" id="inputNamaSantri" class="form-control" placeholder="Masukkan nama lengkap..." required style="text-transform: uppercase;">
+    <div class="modal-overlay" id="modalFormSantri" onclick="tutupFormSantri(event)">
+        <div class="modal-content-box">
+            <div class="modal-header">
+                <span id="judulModalKamar">Detail Kamar</span>
+                <button class="btn-close-modal" onclick="paksaTutupForm()">&times;</button>
+            </div>
+            <div class="modal-body" id="kontenModalSantri">
                 </div>
-                <div class="form-group">
-                    <label for="inputKamarSantri">Pilih Kamar:</label>
-                    <select id="inputKamarSantri" class="form-control" required>
-                        <option value="" disabled selected>-- Pilih Kamar (A1 - A13) --</option>
-                        <option value="A1">Kamar A1</option>
-                        <option value="A2">Kamar A2</option>
-                        <option value="A3">Kamar A3</option>
-                        <option value="A4">Kamar A4</option>
-                        <option value="A5">Kamar A5</option>
-                        <option value="A6">Kamar A6</option>
-                        <option value="A7">Kamar A7</option>
-                        <option value="A8">Kamar A8</option>
-                        <option value="A9">Kamar A9</option>
-                        <option value="A10">Kamar A10</option>
-                        <option value="A11">Kamar A11</option>
-                        <option value="A12">Kamar A12</option>
-                        <option value="A13">Kamar A13</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-submit-santri">💾 Simpan Data Santri</button>
-            </form>
         </div>
     </div>
 
-    <div class="modal" id="modalTambahMassal" onclick="tutupModalTambahMassal(event)">
-        <div class="modal-content" style="max-width: 450px;">
-            <span class="close-btn" onclick="paksaTutupModalMassal()">&times;</span>
-            <h3 style="margin-top: 0; color: #2c3e50; margin-bottom: 20px;">📥 Tambah Banyak Santri (Paste List)</h3>
-            
-            <form id="formInputSantriMassal" onsubmit="simpanSantriMassal(event)">
-                <div class="form-group">
-                    <label for="inputKamarSantriMassal">Pilih Kamar Tujuan:</label>
-                    <select id="inputKamarSantriMassal" class="form-control" required>
-                        <option value="" disabled selected>-- Pilih Kamar (A1 - A13) --</option>
-                        <option value="A1">Kamar A1</option>
-                        <option value="A2">Kamar A2</option>
-                        <option value="A3">Kamar A3</option>
-                        <option value="A4">Kamar A4</option>
-                        <option value="A5">Kamar A5</option>
-                        <option value="A6">Kamar A6</option>
-                        <option value="A7">Kamar A7</option>
-                        <option value="A8">Kamar A8</option>
-                        <option value="A9">Kamar A9</option>
-                        <option value="A10">Kamar A10</option>
-                        <option value="A11">Kamar A11</option>
-                        <option value="A12">Kamar A12</option>
-                        <option value="A13">Kamar A13</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="textareaListSantri">Daftar Nama Santri (1 Baris = 1 Nama):</label>
-                    <textarea id="textareaListSantri" class="form-control" rows="10" placeholder="Ketik atau paste nama ke bawah di sini...&#10;Contoh:&#10;AHMAD FAIZ&#10;MUHAMMAD RIZAL&#10;ZULKIFLI" required style="text-transform: uppercase; resize: vertical; line-height: 1.5;"></textarea>
-                </div>
-                <button type="submit" class="btn-submit-santri" style="background-color: #d97706;">📥 Mulai Import Banyak Santri</button>
-            </form>
-        </div>
-    </div>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-<script>
-        // 1. KONFIGURASI DATABASE FIREBASE CLOUD
+    <script>
+        // 1. KONEKSI FIREBASE
         const firebaseConfig = {
             databaseURL: "https://db-asrama-default-rtdb.firebaseio.com/"
         };
-        
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
 
-        // 2. STATE GLOBAL MANAGEMENT
-        let globalDataSantriMurni = [];
-        let globalDataAbsensiTerpilih = [];
-        let statusIzinSantriAktif = []; 
+        // 2. STATE DATA GLOBAL
+        let MASTER_KAMAR_ASRAMA = {};
+        let globalDataAbsensiAsrama = [];
+        let globalDataIzinAsrama = [];
         let kamarAktifSekarang = "";
 
-        // 3. INISIALISASI INPUT TANGGAL (DEFAULT HARI INI)
+        // 3. INISIALISASI TANGGAL (PERBAIKAN: DISINKRONKAN KE FORMAT HTML YYYY-MM-DD)
         function inisialisasiTanggal() {
-            const inputTanggal = document.getElementById('tanggalAbsen');
-            const hariIni = new Date();
-            const zonaWaktuLokal = new Date(hariIni.getTime() - (hariIni.getTimezoneOffset() * 60000));
-            const formatStringIsi = zonaWaktuLokal.toISOString().split('T')[0];
-            inputTanggal.value = formatStringIsi;
-
-            // Pasang event listener jika tanggal diubah
-            inputTanggal.addEventListener('change', () => {
-                muatUlangTampilanSesuaiTanggal();
-            });
+            const elemenTanggal = document.getElementById('inputTanggalFilter');
+            if (!elemenTanggal.value) {
+                const d = new Date();
+                const tahun = d.getFullYear();
+                const bulan = String(d.getMonth() + 1).padStart(2, '0');
+                const tanggal = String(d.getDate()).padStart(2, '0');
+                
+                // Set value ke format standar HTML input date: "YYYY-MM-DD"
+                elemenTanggal.value = `${tahun}-${bulan}-${tanggal}`;
+            }
         }
 
-        // 4. REALTIME LISTEN DATABASE FIREBASE CLOUD
+        // 4. AMBIL DATA REALTIME DARI CLOUD DATABASE
         function listenFirebaseData() {
-            // Node data master santri
-            db.ref('dataMasterSantri').on('value', (snapshot) => {
-                const data = snapshot.val();
-                globalDataSantriMurni = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
-                muatUlangTampilanSesuaiTanggal();
+            // Ambil struktur master kamar
+            db.ref('masterKamarAsrama').on('value', (snapshot) => {
+                MASTER_KAMAR_ASRAMA = snapshot.val() || {};
+                prosesDanRenderTampilan();
             });
 
-            // Node data absensi harian
+            // Ambil data log absensi harian
             db.ref('dataAbsensiAsrama').on('value', (snapshot) => {
                 const data = snapshot.val();
-                globalDataAbsensiTerpilih = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
-                muatUlangTampilanSesuaiTanggal();
+                globalDataAbsensiAsrama = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
+                prosesDanRenderTampilan();
+                if (kamarAktifSekarang) renderUlangModalSantri();
             });
 
-            // Node sinkronisasi izin aktif dari izin1.html
+            // Ambil data perizinan aktif (untuk deteksi otomatis status "Izin")
             db.ref('dataIzinAsrama').on('value', (snapshot) => {
                 const data = snapshot.val();
-                statusIzinSantriAktif = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
-                muatUlangTampilanSesuaiTanggal();
+                globalDataIzinAsrama = data ? (Array.isArray(data) ? data : Object.values(data)) : [];
+                prosesDanRenderTampilan();
+                if (kamarAktifSekarang) renderUlangModalSantri();
             });
         }
 
-        // 5. RE-RENDER FILTER DATA KETIKA TANGGAL / DATABASE BERUBAH
-        function muatUlangTampilanSesuaiTanggal() {
-            if (kamarAktifSekarang !== "") {
-                bukaFormAbsenKamar(kamarAktifSekarang);
-            }
+        function gantiTanggalFilter() {
+            prosesDanRenderTampilan();
         }
 
-        // 6. LOGIKA UTAMA SINKRONISASI DAN CEK RENTANG DURASI IZIN (OTOMATIS TERBLOKIR)
-        function cekApakahSantriIzin(namaSantri, kamarSantri, tanggalAbsenDipilih) {
-            if (!statusIzinSantriAktif || statusIzinSantriAktif.length === 0) {
-                return { status: false, keterangan: "" };
-            }
+        // 5. LOGIKA PEMROSESAN & RENDER KARTU KAMUR
+        function prosesDanRenderTampilan() {
+            const wrapperGrid = document.getElementById('wrapperGridKamar');
+            if (!wrapperGrid) return;
 
-            const namaClean = namaSantri.trim().toUpperCase();
-            const kamarClean = kamarSantri.trim().toUpperCase().replace("KAMAR", "").trim();
-            
-            // Konversi tanggal absen yang dipilih di list.html ke objek Date lokal (00:00:00)
-            const tanggalTarget = new Date(tanggalAbsenDipilih + "T00:00:00");
+            const tanggalTerpilih = document.getElementById('inputTanggalFilter').value;
+            wrapperGrid.innerHTML = "";
 
-            // Lakukan pengecekan berulang ke seluruh data perizinan aktif
-            for (const dataIzin of statusIzinSantriAktif) {
-                if (!dataIzin || !dataIzin.nama || !dataIzin.kamar) continue;
-
-                const namaIzin = dataIzin.nama.trim().toUpperCase();
-                const kamarIzin = dataIzin.kamar.trim().toUpperCase().replace("KAMAR", "").trim();
-
-                // Cocokkan Nama & Kamar
-                if (namaClean === namaIzin && kamarClean === kamarIzin) {
-                    // Ekstrak nilai tanggal murni saja (YYYY-MM-DD) dari properti waktuMulai dan waktuSelesai
-                    const tglMulaiMurni = new Date(dataIzin.waktuMulai).toISOString().split('T')[0];
-                    const tglSelesaiMurni = new Date(dataIzin.waktuSelesai).toISOString().split('T')[0];
-
-                    // Buat objek tanggal netral 00:00:00 untuk pembandingan yang presisi
-                    const tanggalMulaiIzin = new Date(tglMulaiMurni + "T00:00:00");
-                    const tanggalSelesaiIzin = new Date(tglSelesaiMurni + "T00:00:00");
-
-                    // JIKA tanggal target absen berada dalam rentang masa berlaku izin, maka BLOKIR!
-                    if (tanggalTarget >= tanggalMulaiIzin && tanggalTarget <= tanggalSelesaiIzin) {
-                        return { 
-                            status: true, 
-                            keterangan: dataIzin.keterangan || `Izin Resmi Asrama (${dataIzin.durasiTeks || ''})` 
-                        };
-                    }
-                }
-            }
-            return { status: false, keterangan: "" };
-        }
-
-        // 7. MEMBUKA MODAL POPUP INPUT ABSEN PER KAMAR
-        function bukaFormAbsenKamar(namaKamar) {
-            kamarAktifSekarang = namaKamar;
-            const tanggalDipilih = document.getElementById('tanggalAbsen').value;
-            
-            document.getElementById('judulModal').innerText = `PRESENSI: ${namaKamar.toUpperCase()}`;
-            const containerTabel = document.getElementById('kontenTabelSantri');
-            containerTabel.innerHTML = "";
-
-            // Filter santri berdasarkan kamar pilihan
-            const listSantriKamar = globalDataSantriMurni.filter(s => {
-                if (!s || !s.kamar) return false;
-                return s.kamar.trim().toUpperCase() === namaKamar.trim().toUpperCase();
-            });
-
-            if (listSantriKamar.length === 0) {
-                containerTabel.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#999; padding:20px;">Tidak ada data nama santri terdaftar di kamar ini.</td></tr>`;
-                document.getElementById('modalFormSantri').classList.add('show');
+            const daftarKunciKamar = Object.keys(MASTER_KAMAR_ASRAMA);
+            if (daftarKunciKamar.length === 0) {
+                wrapperGrid.innerHTML = `<div class="empty-state-grid">Belum ada master data kamar di Firebase.</div>`;
                 return;
             }
 
-            // Render isi data baris tabel santri
-            listSantriKamar.forEach((santri) => {
-                const tr = document.createElement('tr');
-                
-                // Ambil status presensi yang sudah tersimpan di tanggal terpilih (jika ada)
-                const dataLogLama = globalDataAbsensiTerpilih.find(log => 
-                    log.tanggal === tanggalDipilih && 
-                    log.nama.trim().toUpperCase() === santri.nama.trim().toUpperCase() &&
-                    log.kamar.trim().toUpperCase() === namaKamar.trim().toUpperCase()
-                );
+            // Filter log absensi yang sesuai tanggal hari ini
+            const absensiHariIni = globalDataAbsensiAsrama.filter(item => item && item.tanggal === tanggalTerpilih);
 
-                const statusSekarang = dataLogLama ? dataLogLama.status : "";
+            daftarKunciKamar.forEach(namaKamar => {
+                const listSantriKamar = MASTER_KAMAR_ASRAMA[namaKamar] || [];
+                const totalSantri = listSantriKamar.length;
 
-                // PANGGIL FUNGSI LOGIKA BLOKIR SINKRONISASI 
-                const cekIzin = cekApakahSantriIzin(santri.nama, namaKamar, tanggalDipilih);
-
-                if (cekIzin.status) {
-                    // JIKA TERDETEKSI IZIN: Tambahkan class CSS terblokir agar tabel berubah warna abu-abu
-                    tr.classList.add('row-terblokir-izin');
+                let terabsen = 0;
+                listSantriKamar.forEach(namaSantri => {
+                    // Cek apakah sudah input di tabel absen
+                    const sudahAbsen = absensiHariIni.some(a => a.nama.toUpperCase() === namaSantri.toUpperCase() && a.kamar === namaKamar);
                     
-                    tr.innerHTML = `
-                        <td><strong>${santri.nama.toUpperCase()}</strong><br><small style="color:#d97706; font-weight:600;">⚠️ ${cekIzin.keterangan}</small></td>
-                        <td style="text-align: center;"><span class="badge-izin-block">Izin Aktif</span></td>
-                        <td style="text-align: center;">
-                            <button class="btn-opsi-absen" onclick="peringatanIzinAktif('${santri.nama}', '${cekIzin.keterangan}')" style="background:#b3b3b3; color:#fff; cursor:not-allowed; box-shadow:none;">🔒 Terkunci</button>
-                        </td>
-                    `;
-                } else {
-                    // JIKA TIDAK IZIN / STATUS NORMAL: Render tombol pilihan Hadir, Sakit, Alpha asli kamu
-                    let teksTombolOpsi = "Pilih Status";
-                    let classWarnaTombol = "";
+                    // Cek apakah santri sedang dalam masa izin aktif
+                    const sedangIzin = globalDataIzinAsrama.some(i => i && i.nama && i.nama.toUpperCase() === namaSantri.toUpperCase() && i.kamar === namaKamar);
 
-                    if (statusSekarang === "Hadir") { teksTombolOpsi = "🟢 Hadir"; classWarnaTombol = "status-hadir"; }
-                    else if (statusSekarang === "Sakit") { teksTombolOpsi = "🟡 Sakit"; classWarnaTombol = "status-sakit"; }
-                    else if (statusSekarang === "Izin") { teksTombolOpsi = "🟠 Izin"; classWarnaTombol = "status-izin"; }
-                    else if (statusSekarang === "Alpha") { teksTombolOpsi = "🔴 Alpha"; classWarnaTombol = "status-alpha"; }
+                    if (sudahAbsen || sedangIzin) {
+                        terabsen++;
+                    }
+                });
 
-                    tr.innerHTML = `
-                        <td><strong>${santri.nama.toUpperCase()}</strong></td>
-                        <td style="text-align: center;"><span class="badge-status-absen ${classWarnaTombol}">${statusSekarang || 'Belum Absen'}</span></td>
-                        <td style="text-align: center;">
-                            <select class="btn-opsi-absen" onchange="prosesSimpanStatusAbsen('${santri.nama}', '${namaKamar}', this.value)">
-                                <option value="">-- Ubah --</option>
-                                <option value="Hadir" ${statusSekarang === 'Hadir' ? 'selected' : ''}>Hadir</option>
-                                <option value="Sakit" ${statusSekarang === 'Sakit' ? 'selected' : ''}>Sakit</option>
-                                <option value="Alpha" ${statusSekarang === 'Alpha' ? 'selected' : ''}>Alpha</option>
-                            </select>
-                        </td>
-                    `;
-                }
-                containerTabel.appendChild(tr);
+                const persenProgress = totalSantri > 0 ? Math.round((terabsen / totalSantri) * 100) : 0;
+                const isLengkap = terabsen === totalSantri && totalSantri > 0;
+
+                const elemenCard = document.createElement('div');
+                elemenCard.className = `card-kamar ${isLengkap ? 'status-lengkap' : ''}`;
+                elemenCard.onclick = () => bukaFormSantriKamar(namaKamar);
+
+                elemenCard.innerHTML = `
+                    <h3><span>🚪 ${namaKamar.toUpperCase()}</span></h3>
+                    <div class="info-stat">
+                        <span>Status Terabsen:</span>
+                        <span class="badge-count">${terabsen} / ${totalSantri} Santri</span>
+                    </div>
+                    <div class="info-stat">
+                        <span>Persentase:</span>
+                        <span style="font-weight:bold; color:${isLengkap ? '#10b981':'#d97706'};">${persenProgress}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${persenProgress}%; background-color:${isLengkap ? '#10b981':'#d97706'};"></div>
+                    </div>
+                `;
+                wrapperGrid.appendChild(elemenCard);
             });
+        }
 
+        // 6. LOGIKA MODAL POPUP DETAIL & UPDATE ABSENSI
+        function bukaFormSantriKamar(namaKamar) {
+            kamarAktifSekarang = namaKamar;
+            document.getElementById('judulModalKamar').innerText = `🚪 ABSENSI : KAMAR ${namaKamar.toUpperCase()}`;
+            renderUlangModalSantri();
             document.getElementById('modalFormSantri').classList.add('show');
         }
 
-        // 8. TINDAKAN JIKA PENGURUS MENCOBA MENGKLIK TOMBOL SANTRI YANG SEDANG TERKUNCI IZIN
-        function peringatanIzinAktif(nama, alasan) {
-            alert(`TINDAKAN DITOLAK!\n\nSantri bernama "${nama.toUpperCase()}" tidak bisa diubah status presensinya melalui halaman ini karena status perizinannya sedang aktif (Sinkronisasi dari halaman Perizinan).\n\nKeterangan Izin: "${alasan}"`);
+        function renderUlangModalSantri() {
+            const kontenerBody = document.getElementById('kontenModalSantri');
+            if (!kontenerBody || !kamarAktifSekarang) return;
+
+            const tanggalTerpilih = document.getElementById('inputTanggalFilter').value;
+            kontenerBody.innerHTML = "";
+
+            const listSantri = MASTER_KAMAR_ASRAMA[kamarAktifSekarang] || [];
+
+            listSantri.forEach(namaSantri => {
+                // Cari data absensi eksis di database
+                const dataAbsenEksis = globalDataAbsensiAsrama.find(a => a && a.tanggal === tanggalTerpilih && a.nama.toUpperCase() === namaSantri.toUpperCase() && a.kamar === kamarAktifSekarang);
+                
+                // Cari status perizinan aktif
+                const dataIzinEksis = globalDataIzinAsrama.find(i => i && i.nama && i.nama.toUpperCase() === namaSantri.toUpperCase() && i.kamar === kamarAktifSekarang);
+
+                let statusAktif = dataAbsenEksis ? dataAbsenEksis.status : "";
+                let labelTambahanIzin = "";
+
+                // Overwrite otomatis jika santri masuk daftar izin aktif
+                if (dataIzinEksis) {
+                    statusAktif = "Izin";
+                    labelTambahanIzin = `<br><span class="keterangan-izin-label">Pemberitahuan: Sedang Izin ("${dataIzinEksis.keterangan || '-'}")</span>`;
+                }
+
+                const row = document.createElement('div');
+                row.className = "santri-row";
+
+                row.innerHTML = `
+                    <div class="santri-info">
+                        <span>${namaSantri.toUpperCase()}</span>
+                        ${labelTambahanIzin}
+                    </div>
+                    <div class="santri-actions">
+                        <button class="btn-status hadir ${statusAktif==='Hadir'?'active':''}" onclick="eksekusiSimpanStatusAbsen('${namaSantri}','Hadir')">Hadir</button>
+                        <button class="btn-status izin ${statusAktif==='Izin'?'active':''}" onclick="eksekusiSimpanStatusAbsen('${namaSantri}','Izin')">Izin</button>
+                        <button class="btn-status sakit ${statusAktif==='Sakit'?'active':''}" onclick="eksekusiSimpanStatusAbsen('${namaSantri}','Sakit')">Sakit</button>
+                        <button class="btn-status alpha ${statusAktif==='Alpha'?'active':''}" onclick="eksekusiSimpanStatusAbsen('${namaSantri}','Alpha')">Alpha</button>
+                    </div>
+                `;
+                kontenerBody.appendChild(row);
+            });
         }
 
-        // 9. PROSES UPDATE DATA ABSEN KE FIREBASE REALTIME CLOUD 
-        function prosesSimpanStatusAbsen(namaInput, kamarInput, statusBaru) {
-            if (!statusBaru) return;
-            const tanggalAbsen = document.getElementById('tanggalAbsen').value;
+        // 7. INTERAKSI SIMPAN/UBAH DATA STATUS SECARA REALTIME KE CLOUD
+        function eksekusiSimpanStatusAbsen(namaInput, statusBaru) {
+            const tanggalTerpilih = document.getElementById('inputTanggalFilter').value;
 
-            // Jika status dirubah menjadi "Sakit", arahkan otomatis ke formulir rekam medis izin2.html
-            if (statusBaru === "Sakit") {
-                sessionStorage.setItem('tempNamaSakit', namaInput);
-                sessionStorage.setItem('tempKamarSakit', kamarInput);
-                sessionStorage.setItem('tempTanggalSakit', tanggalAbsen);
-                window.location.href = 'izin2.html';
+            // Jika status ditekuk ke Izin, oper langsung ke form detail izin.html bawaan Anda
+            if (statusBaru === 'Izin') {
+                sessionStorage.setItem('tempNama', namaInput);
+                sessionStorage.setItem('tempKamar', kamarAktifSekarang);
+                sessionStorage.setItem('tempTanggal', tanggalTerpilih);
+                window.location.href = 'izin.html';
                 return;
             }
 
-            // Bersihkan data lama pada tanggal, nama, dan kamar yang sama agar tidak menumpuk double
-            let dataCleanTerupdate = globalDataAbsensiTerpilih.filter(log => 
-                !(log.tanggal === tanggalAbsen && 
-                  log.nama.trim().toUpperCase() === namaInput.trim().toUpperCase() && 
-                  log.kamar.trim().toUpperCase() === kamarInput.trim().toUpperCase())
-            );
+            // Bersihkan data lama santri tersebut pada tanggal terpilih agar tidak duplikat
+            let dataCleanTerupdate = globalDataAbsensiAsrama.filter(item => {
+                if (!item) return false;
+                return !(item.tanggal === tanggalTerpilih && item.nama.toUpperCase() === namaInput.toUpperCase());
+            });
 
-            // Dorong data status baru ke array cloud
+            // Masukkan data baru ke array log absensi
             dataCleanTerupdate.push({
-                tanggal: tanggalAbsen,
-                kamar: kamarInput,
-                nama: namaInput,
+                tanggal: tanggalTerpilih,
+                kamar: kamarAktifSekarang,
+                nama: namaInput.toUpperCase(),
                 status: statusBaru,
                 keterangan: ""
             });
@@ -800,7 +553,7 @@
                 });
         }
 
-        // 10. MENUTUP MODAL DIALOG POPUP ABSEN
+        // 8. MENUTUP MODAL DIALOG POPUP ABSEN
         function tutupFormSantri(e) { 
             if (e.target.id === 'modalFormSantri') paksaTutupForm(); 
         }
@@ -814,7 +567,7 @@
         inisialisasiTanggal();
         listenFirebaseData();
 
-        // 11. AUTOMATION HIGHLIGHT MENU ACTIVE SIDEBAR
+        // 9. AUTOMATION HIGHLIGHT MENU ACTIVE SIDEBAR
         const namaFileAktif = window.location.pathname.split('/').pop();
         document.querySelectorAll('.sidebar ul li a').forEach(link => {
             link.classList.remove('active');
